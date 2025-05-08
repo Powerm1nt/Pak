@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
 
-project(PKFramework VERSION 1.0.0 LANGUAGES CXX)
+project(PkFramework VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,18 +20,28 @@ foreach(LIB_DIR ${LIB_DIRS})
     endif()
 endforeach()
 
-add_library(PKFramework SHARED library.cpp)
+add_library(PkFramework SHARED src/pk/PkFramework.cpp)
+
+set_target_properties(PkFramework PROPERTIES
+        WINDOWS_EXPORT_ALL_SYMBOLS TRUE
+)
 
 foreach(LIB_DIR ${LIB_DIRS})
     if(IS_DIRECTORY ${LIB_DIR})
         get_filename_component(LIB_NAME ${LIB_DIR} NAME)
         if(TARGET ${LIB_NAME})
-            target_link_libraries(PKFramework PRIVATE ${LIB_NAME})
+            target_link_libraries(PkFramework PRIVATE ${LIB_NAME})
         endif()
     endif()
 endforeach()
 
-target_include_directories(PKFramework PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+target_include_directories(PkFramework PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src/pk/include>
         $<INSTALL_INTERFACE:include>
 )
+
+add_subdirectory(src/cli)
+
+set_target_properties(PkFramework PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set_target_properties(PkFramework PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set_target_properties(PkCli PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

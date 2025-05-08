@@ -1,6 +1,6 @@
 #ifndef PKFRAMEWORK_LIBRARY_H
 #define PKFRAMEWORK_LIBRARY_H
 
-void hello();
+void printHello();
 
 #endif //PKFRAMEWORK_LIBRARY_H
