@@ -20,5 +20,10 @@
 #define PKFRAMEWORK_LIBRARY_H
 
 #include "helper_cli.hpp"
+#include "m_repository.hpp"
+#include "m_package.hpp"
+
+namespace Pk {
+}
 
 #endif //PKFRAMEWORK_LIBRARY_H
