@@ -1,3 +1,6 @@
 [submodule "libs/argh"]
 	path = libs/argh
 	url = https://github.com/adishavit/argh
+[submodule "libs/jsoncpp"]
+	path = libs/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp.git

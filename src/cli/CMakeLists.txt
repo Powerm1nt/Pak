@@ -3,4 +3,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(PkCli main.cpp)
 
-target_link_libraries(PkCli PRIVATE PkFramework argh)
+target_link_libraries(PkCli PRIVATE PkFramework argh) # TODO: jsoncpp_lib
