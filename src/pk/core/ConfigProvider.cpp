@@ -18,15 +18,23 @@
 #include "m_config.hpp"
 #include <cstdlib>
 #include <fstream>
+#include <utility>
 #include <json/json.h>
 
 namespace Pk {
-    ConfigProvider::ConfigProvider(const std::string &token, const std::string &config_file,
-                                   std::unique_ptr<std::string> config_dir)
-        : token(token), config_file(config_file), config_dir(std::move(config_dir)) {
+    using namespace std;
+
+    ConfigProvider::ConfigProvider(
+        string token,
+        string config_file,
+        unique_ptr<string> config_dir
+    )
+        : token(std::move(token)),
+          config_file(std::move(config_file)),
+          config_dir(move(config_dir)) {
     }
 
-    char *ConfigProvider::get_env_value(const std::string &key) {
+    char *ConfigProvider::get_env_value(const string &key) {
         char *value = nullptr;
         size_t size = 0;
 
@@ -37,24 +45,23 @@ namespace Pk {
         return nullptr;
     }
 
-    void ConfigProvider::set_token(const std::string &new_token) {
+    void ConfigProvider::set_token(const string &new_token) {
         token = new_token;
     }
 
-    void ConfigProvider::set_config_dir(const std::string &new_config_dir) {
-        config_dir = std::make_unique<std::string>(new_config_dir);
+    void ConfigProvider::set_config_dir(const string &new_config_dir) {
+        config_dir = make_unique<string>(new_config_dir);
     }
 
-    // Load configuration from a JSON file
-    bool ConfigProvider::load_config(const std::string &file_path) {
-        std::ifstream config_file(file_path, std::ifstream::binary);
+    bool ConfigProvider::load_config(const string &file_path) {
+        ifstream config_file(file_path, ifstream::binary);
         if (!config_file.is_open()) {
             return false; // Error: Cannot open config file
         }
 
         Json::Value root;
         Json::CharReaderBuilder reader;
-        std::string errs;
+        string errs;
 
         if (!Json::parseFromStream(reader, config_file, &root, &errs)) {
             return false; // Error parsing JSON
@@ -64,21 +71,20 @@ namespace Pk {
             token = root["token"].asString();
         }
         if (root.isMember("config_dir")) {
-            config_dir = std::make_unique<std::string>(root["config_dir"].asString());
+            config_dir = make_unique<string>(root["config_dir"].asString());
         }
 
         return true;
     }
 
-    // Save configuration to a JSON file
-    bool ConfigProvider::save_config(const std::string &file_path) const {
+    bool ConfigProvider::save_config(const string &file_path) const {
         Json::Value root;
         root["token"] = token;
         if (config_dir) {
             root["config_dir"] = *config_dir;
         }
 
-        std::ofstream config_file(file_path, std::ofstream::binary);
+        ofstream config_file(file_path, ofstream::binary);
         if (!config_file.is_open()) {
             return false; // Error: Cannot open config file for writing
         }

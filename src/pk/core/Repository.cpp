@@ -16,14 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include "m_repository.hpp"
 
 namespace Pk {
-    Repository::Repository(const std::string &name, const std::string &description, const std::string &author,
-                           const std::string &url, const std::string &last_updated, const std::string &created_at,
-                           const std::string &license, const std::vector<Package> &packages)
-        : name(name), description(description), author(author), url(url), last_updated(last_updated),
-          created_at(created_at), license(license), packages(packages) {
+    using namespace std;
+
+    Repository::Repository(
+        string name,
+        string description,
+        string author,
+        string url,
+        string last_updated,
+        string created_at,
+        string license,
+
+        const vector<Package> &packages
+    )
+        : name(move(name)),
+          description(move(description)),
+          author(move(author)),
+          url(move(url)),
+          last_updated(move(last_updated)),
+          created_at(move(created_at)),
+          license(move(license)),
+          packages(packages) {
     }
 
     Repository::~Repository() = default;

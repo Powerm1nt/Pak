@@ -16,17 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include "m_package.hpp"
 
 namespace Pk {
-    Package::Package(const std::string &name, const std::string &version, const std::string &description,
-                     const std::string &author, const std::string &release_url, const std::string &last_updated,
-                     const std::string &created_at, const std::string &install_location,
-                     const Platforms::arch &arch, const Platforms::platform &platform,
-                     const std::vector<std::string> &files, bool restart_required)
-        : name(name), version(version), description(description), author(author),
-          release_url(release_url), last_updated(last_updated), created_at(created_at),
-          install_location(install_location), arch(arch), platform(platform),
-          files(files), restart_required(restart_required) {
+    Package::Package(
+        std::string name,
+        std::string version,
+        std::string description,
+        std::string author,
+        std::string release_url,
+        std::string last_updated,
+        std::string created_at,
+        std::string install_location,
+
+        const Platforms::arch &arch,
+        const Platforms::platform &platform,
+
+        const std::vector<std::string> &files,
+
+        bool restart_required
+    )
+        : name(std::move(name)),
+          version(std::move(version)),
+          description(std::move(description)),
+          author(std::move(author)),
+          release_url(std::move(release_url)),
+          last_updated(std::move(last_updated)),
+          created_at(std::move(created_at)),
+          install_location(std::move(install_location)),
+          arch(arch),
+          platform(platform),
+          files(files),
+          restart_required(restart_required) {
     }
 } // namespace Pk

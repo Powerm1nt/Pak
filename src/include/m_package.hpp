@@ -8,17 +8,20 @@
 namespace Pk {
     class Package {
     public:
-        Package(const std::string &name,
-                const std::string &version,
-                const std::string &description,
-                const std::string &author,
-                const std::string &release_url,
-                const std::string &last_updated,
-                const std::string &created_at,
-                const std::string &install_location,
+        Package(std::string name,
+                std::string version,
+                std::string description,
+                std::string author,
+                std::string release_url,
+                std::string last_updated,
+                std::string created_at,
+                std::string install_location,
+
                 const Platforms::arch &arch,
                 const Platforms::platform &platform,
+
                 const std::vector<std::string> &files,
+
                 bool restart_required = false);
 
         const std::string &get_name() const { return name; }

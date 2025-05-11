@@ -25,8 +25,7 @@
 namespace Pk {
     class ConfigProvider {
     public:
-        ConfigProvider(const std::string &token, const std::string &config_file,
-                       std::unique_ptr<std::string> config_dir);
+        ConfigProvider(std::string token, std::string config_file, std::unique_ptr<std::string> config_dir);
 
         const std::string &get_token() const { return token; }
         const std::string &get_config_file() const { return config_file; }
