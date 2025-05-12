@@ -49,6 +49,7 @@ foreach (LIB_DIR ${LIB_DIRS})
                         CXX_EXTENSIONS OFF
                         POSITION_INDEPENDENT_CODE ON
                         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+                        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
                 )
                 include_directories(${LIB_NAME} INTERFACE ${LIB_DIR}/include)
             elseif (TARGET ${LIB_NAME})

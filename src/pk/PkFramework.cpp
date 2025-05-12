@@ -20,7 +20,6 @@
 
 #include <filesystem>
 #include <iostream>
-#include <json/json.h>
 
 #include "m_config.hpp"
 
