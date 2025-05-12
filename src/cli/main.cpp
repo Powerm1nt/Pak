@@ -21,6 +21,7 @@
 #include <argh.h>
 #include <PkFramework.hpp>
 #include <unordered_map>
+#include <json/json.h>
 
 enum class Command {
     Unknown,
