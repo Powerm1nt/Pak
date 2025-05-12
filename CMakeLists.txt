@@ -4,7 +4,7 @@ project(PkFramework VERSION 2.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(PkFramework SHARED
         src/pk/PkFramework.cpp
@@ -16,7 +16,11 @@ add_library(PkFramework SHARED
 
 set_target_properties(PkFramework PROPERTIES
         WINDOWS_EXPORT_ALL_SYMBOLS TRUE
+        POSITION_INDEPENDENT_CODE ON
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
 )
+
+set(JSONCPP_WITH_TESTS OFF CACHE BOOL "Disable jsoncpp tests" FORCE)
 
 # Include directories for PkFramework
 target_include_directories(PkFramework PUBLIC
@@ -37,10 +41,16 @@ foreach (LIB_DIR ${LIB_DIRS})
             message(STATUS "Found standalone CMake library: ${LIB_NAME} at ${LIB_DIR}")
             add_subdirectory(${LIB_DIR})
             # Handle special cases like JsonCpp where the target name might differ
-            if (LIB_NAME STREQUAL "jsoncpp" AND TARGET jsoncpp_static)
-                list(APPEND LIB_TARGETS jsoncpp_static)
-                set_property(TARGET jsoncpp_static PROPERTY POSITION_INDEPENDENT_CODE ON)
-                include_directories(${LIB_NAME} INTERFACE ${LIB_DIR})
+            if (LIB_NAME STREQUAL "jsoncpp" AND TARGET jsoncpp_lib)
+                list(APPEND LIB_TARGETS jsoncpp_lib)
+                set_target_properties(jsoncpp_lib PROPERTIES
+                        CXX_STANDARD 23
+                        CXX_STANDARD_REQUIRED ON
+                        CXX_EXTENSIONS OFF
+                        POSITION_INDEPENDENT_CODE ON
+                        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+                )
+                include_directories(${LIB_NAME} INTERFACE ${LIB_DIR}/include)
             elseif (TARGET ${LIB_NAME})
                 list(APPEND LIB_TARGETS ${LIB_NAME})
             endif ()
