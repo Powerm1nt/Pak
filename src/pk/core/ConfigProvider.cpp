@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "m_config.hpp"
-#include <cstdlib>
 #include <fstream>
+#include <stdlib.h>
 #include <json/json.h>
 
 namespace Pk {

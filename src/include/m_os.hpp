@@ -21,9 +21,13 @@
 
 #include <string>
 
-namespace Platforms {
-    using namespace std;
+#ifdef linux
+#undef linux
+#undef unix
+#endif
 
+
+namespace Platforms {
     enum arch {
         x86,
         x86_64,
@@ -41,9 +45,9 @@ namespace Platforms {
     };
 
     // TODO: use unordered_map to conv platform to string
-    string get_platform(platform &platform);
+    std::string get_platform(Platforms::platform &platform);
 
-    string get_arch(arch &arch);
+    std::string get_arch(Platforms::arch &arch);
 }
 
 #endif //M_OS_HPP
