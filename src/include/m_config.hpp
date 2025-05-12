@@ -25,14 +25,12 @@
 namespace Pk {
     class ConfigProvider {
     public:
-        ConfigProvider(std::string token, std::string config_file, std::unique_ptr<std::string> config_dir);
-
         const std::string &get_token() const { return token; }
         const std::string &get_config_file() const { return config_file; }
 
         const std::string *get_config_dir() const { return config_dir ? config_dir.get() : nullptr; }
 
-        static char *get_env_value(const std::string &key);
+        static std::string get_env_value(const std::string &key);
 
         void set_token(const std::string &token);
 

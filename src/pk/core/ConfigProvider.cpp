@@ -18,31 +18,22 @@
 #include "m_config.hpp"
 #include <cstdlib>
 #include <fstream>
-#include <utility>
 #include <json/json.h>
 
 namespace Pk {
     using namespace std;
 
-    ConfigProvider::ConfigProvider(
-        string token,
-        string config_file,
-        unique_ptr<string> config_dir
-    )
-        : token(std::move(token)),
-          config_file(std::move(config_file)),
-          config_dir(move(config_dir)) {
-    }
-
-    char *ConfigProvider::get_env_value(const string &key) {
+    string ConfigProvider::get_env_value(const string &key) {
         char *value = nullptr;
         size_t size = 0;
 
         if (_dupenv_s(&value, &size, key.c_str()) == 0 && value != nullptr) {
-            return value; // Caller must free this memory
+            string result(value);
+            free(value);
+            return result;
         }
 
-        return nullptr;
+        return "";
     }
 
     void ConfigProvider::set_token(const string &new_token) {

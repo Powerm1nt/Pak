@@ -20,10 +20,19 @@
 #define PKFRAMEWORK_LIBRARY_H
 
 #include "helper_cli.hpp"
+#include "m_config.hpp"
 #include "m_repository.hpp"
 #include "m_package.hpp"
 
 namespace Pk {
+    class PkFramework {
+        unique_ptr<ConfigProvider> config;
+
+    public:
+        PkFramework();
+
+        ~PkFramework() = default;
+    };
 }
 
 #endif //PKFRAMEWORK_LIBRARY_H

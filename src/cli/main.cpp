@@ -37,7 +37,7 @@ enum class Command {
     RmRepo
 };
 
-Command getCommand(const std::string& cmd) {
+Command getCommand(const std::string &cmd) {
     static const std::unordered_map<std::string, Command> commandMap = {
         {"auth", Command::Auth},
         {"logout", Command::Logout},
@@ -60,7 +60,12 @@ Command getCommand(const std::string& cmd) {
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
+    using namespace Pk;
+    // Testing PkFramework
+
+    auto pktest = new PkFramework();
+
     argh::parser cmdl;
 
     cmdl.add_params({
@@ -89,25 +94,25 @@ int main(int argc, char* argv[]) {
     // Help message
     if (commandStr.empty() || cmdl[{"-h", "--help"}]) {
         std::cout << "Pakagify CLI v2.0.0\n\n"
-                  << "Commands:\n"
-                  << "  auth <token>                 Authenticate with Github Token.\n"
-                  << "  logout                       Logout from Pakagify CLI.\n"
-                  << "  whoami                       Get the current authenticated user.\n"
-                  << "  pkginfo <repo> <name>        Get info about a package.\n"
-                  << "  mkrepo <name>                Make a new repository.\n"
-                  << "  retrieve <name>              Download a whole repository of packages.\n"
-                  << "    -k, --keep                 Keep compressed package files after download.\n"
-                  << "  mkpkg <name>                 Make a new empty package.\n"
-                  << "    -a, --arch <arch>          Architecture of the pkg (x64, i386, arm64, noarch).\n"
-                  << "    -p, --platform <platform>  Platform of the pkg (win32, darwin, linux, any).\n"
-                  << "  buildpkg <repo> <name>       Build a package.\n"
-                  << "  pushpkg <repo> <name>        Upload a package.\n"
-                  << "  rmpkg <repo> <name>          Delete a package.\n"
-                  << "  rmrepo <name>                Delete a repository.\n\n"
-                  << "Options:\n"
-                  << "  -D, --debug                  Enable debug mode.\n"
-                  << "  -v, --version                Show version.\n"
-                  << "  -h, --help                   Show this help message.\n";
+                << "Commands:\n"
+                << "  auth <token>                 Authenticate with Github Token.\n"
+                << "  logout                       Logout from Pakagify CLI.\n"
+                << "  whoami                       Get the current authenticated user.\n"
+                << "  pkginfo <repo> <name>        Get info about a package.\n"
+                << "  mkrepo <name>                Make a new repository.\n"
+                << "  retrieve <name>              Download a whole repository of packages.\n"
+                << "    -k, --keep                 Keep compressed package files after download.\n"
+                << "  mkpkg <name>                 Make a new empty package.\n"
+                << "    -a, --arch <arch>          Architecture of the pkg (x64, i386, arm64, noarch).\n"
+                << "    -p, --platform <platform>  Platform of the pkg (win32, darwin, linux, any).\n"
+                << "  buildpkg <repo> <name>       Build a package.\n"
+                << "  pushpkg <repo> <name>        Upload a package.\n"
+                << "  rmpkg <repo> <name>          Delete a package.\n"
+                << "  rmrepo <name>                Delete a repository.\n\n"
+                << "Options:\n"
+                << "  -D, --debug                  Enable debug mode.\n"
+                << "  -v, --version                Show version.\n"
+                << "  -h, --help                   Show this help message.\n";
         return 0;
     }
 
@@ -159,7 +164,8 @@ int main(int argc, char* argv[]) {
         }
         case Command::MkPkg: {
             if (cmdl.size() < 2) {
-                std::cerr << "Error: mkpkg requires a name\nUsage: pkcli mkpkg <name> [-a, --arch <arch>] [-p, --platform <platform>]\n";
+                std::cerr <<
+                        "Error: mkpkg requires a name\nUsage: pkcli mkpkg <name> [-a, --arch <arch>] [-p, --platform <platform>]\n";
                 return 1;
             }
             std::string name = cmdl[1];
