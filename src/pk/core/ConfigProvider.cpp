@@ -27,12 +27,19 @@ namespace Pk {
         char *value = nullptr;
         size_t size = 0;
 
+#ifdef WIN32
         if (_dupenv_s(&value, &size, key.c_str()) == 0 && value != nullptr) {
             string result(value);
             free(value);
             return result;
         }
-
+#else
+        if (getenv(key.c_str()) == 0 && value != nullptr) {
+            string result(value);
+            free(value);
+            return result;
+        }
+#endif
         return "";
     }
 
