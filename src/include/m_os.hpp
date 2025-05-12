@@ -19,6 +19,8 @@
 #ifndef M_OS_HPP
 #define M_OS_HPP
 
+#include <string>
+
 namespace Platforms {
     using namespace std;
 
