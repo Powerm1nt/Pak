@@ -24,44 +24,42 @@
 #include "m_package.hpp"
 
 namespace Pk {
-    using namespace std;
-
     class Repository {
     public:
         Repository(
-            string name,
-            string description,
-            string author,
-            string url,
-            string last_updated,
-            string created_at,
-            string license,
+            std::string name,
+            std::string description,
+            std::string author,
+            std::string url,
+            std::string last_updated,
+            std::string created_at,
+            std::string license,
 
-            const vector<Package> &packages
+            const std::vector<Package> &packages
         );
 
         ~Repository();
 
-        const string &get_name() const { return name; }
-        const string &get_description() const { return description; }
-        const string &get_author() const { return author; }
-        const string &get_url() const { return url; }
-        const string &get_last_updated() const { return last_updated; }
-        const string &get_created_at() const { return created_at; }
-        const string &get_license() const { return license; }
+        const std::string &get_name() const { return name; }
+        const std::string &get_description() const { return description; }
+        const std::string &get_author() const { return author; }
+        const std::string &get_url() const { return url; }
+        const std::string &get_last_updated() const { return last_updated; }
+        const std::string &get_created_at() const { return created_at; }
+        const std::string &get_license() const { return license; }
 
-        const vector<Package> &get_packages() const { return packages; }
+        const std::vector<Package> &get_packages() const { return packages; }
 
     private:
-        string name;
-        string description;
-        string author;
-        string url;
-        string last_updated;
-        string created_at;
-        string license;
+        std::string name;
+        std::string description;
+        std::string author;
+        std::string url;
+        std::string last_updated;
+        std::string created_at;
+        std::string license;
 
-        vector<Package> packages;
+        std::vector<Package> packages;
     };
 } // namespace Pk
 

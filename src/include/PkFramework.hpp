@@ -26,7 +26,7 @@
 
 namespace Pk {
     class PkFramework {
-        unique_ptr<ConfigProvider> config;
+        std::unique_ptr<ConfigProvider> config;
 
     public:
         PkFramework();

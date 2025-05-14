@@ -61,10 +61,9 @@ Command getCommand(const std::string &cmd) {
 
 
 int main(int argc, char *argv[]) {
-    using namespace Pk;
     // Testing PkFramework
 
-    auto pktest = new PkFramework();
+    auto pktest = new Pk::PkFramework();
 
     argh::parser cmdl;
 

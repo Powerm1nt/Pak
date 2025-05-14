@@ -21,18 +21,16 @@
 #include "m_repository.hpp"
 
 namespace Pk {
-    using namespace std;
-
     Repository::Repository(
-        string name,
-        string description,
-        string author,
-        string url,
-        string last_updated,
-        string created_at,
-        string license,
+        std::string name,
+        std::string description,
+        std::string author,
+        std::string url,
+        std::string last_updated,
+        std::string created_at,
+        std::string license,
 
-        const vector<Package> &packages
+        const std::vector<Package> &packages
     )
         : name(move(name)),
           description(move(description)),

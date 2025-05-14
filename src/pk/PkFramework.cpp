@@ -25,21 +25,21 @@
 
 namespace Pk {
     PkFramework::PkFramework()
-        : config(make_unique<ConfigProvider>()) {
+        : config(std::make_unique<ConfigProvider>()) {
 #ifdef WIN32
-        const filesystem::path appdata = ConfigProvider::get_env_value("APPDATA");
+        const std::filesystem::path appdata = ConfigProvider::get_env_value("APPDATA");
 #else
         const filesystem::path appdata = ConfigProvider::get_env_value("HOME");
 #endif // WIN32
 
-        const filesystem::path &wdir = "pakagify";
+        const std::filesystem::path &wdir = "pakagify";
 
         if (appdata.empty()) {
             std::cout << "Fail: Cannot access to appdir :/" << std::endl;
             exit(-1);
         }
 
-        config->set_config_dir(filesystem::path(appdata / wdir).string());
+        config->set_config_dir(std::filesystem::path(appdata / wdir).string());
         const std::string *dir = config->get_config_dir();
 
         std::cout << "Application data: " << *dir << std::endl;
