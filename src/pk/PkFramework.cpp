@@ -40,8 +40,5 @@ namespace Pk {
         }
 
         config->set_config_dir(std::filesystem::path(appdata / wdir).string());
-        const std::string *dir = config->get_config_dir();
-
-        std::cout << "Application data: " << *dir << std::endl;
     }
 }

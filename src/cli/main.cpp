@@ -121,8 +121,8 @@ int main(int argc, char *argv[]) {
                 std::cerr << "Error: auth requires a token\nUsage: pkcli auth <token>\n";
                 return 1;
             }
-            std::string token = cmdl[1];
-            authCmd(token.c_str(), debugMode);
+            const std::string &token = cmdl[1];
+            authCmd(token, debugMode);
             break;
         }
         case Command::Logout: {
@@ -138,8 +138,8 @@ int main(int argc, char *argv[]) {
                 std::cerr << "Error: pkginfo requires repo and name\nUsage: pkcli pkginfo <repo> <name>\n";
                 return 1;
             }
-            std::string repo = cmdl[1];
-            std::string name = cmdl[2];
+            const std::string &repo = cmdl[1];
+            const std::string &name = cmdl[2];
             pkgInfoCmd(repo, name, debugMode);
             break;
         }
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
                 std::cerr << "Error: mkrepo requires a name\nUsage: pkcli mkrepo <name>\n";
                 return 1;
             }
-            std::string name = cmdl[1];
+            const std::string &name = cmdl[1];
             mkRepoCmd(name, debugMode);
             break;
         }
