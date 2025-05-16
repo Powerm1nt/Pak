@@ -20,28 +20,48 @@
 #define M_OS_HPP
 
 #include <string>
+#include <unordered_map>
 
 namespace Platforms {
-    enum arch {
+    enum Arch {
         x86,
         x86_64,
         aarch64,
         noarch
     };
 
-    enum platform {
-        windows,
-        linux,
-        unix,
-        darwin,
-        unknown,
-        any
+    enum Platform {
+        Windows,
+        Linux,
+        Unix,
+        Darwin,
+        Unknown,
+        Any
     };
 
-    // TODO: use unordered_map to conv platform to string
-    std::string get_platform(platform &platform);
+    const std::unordered_map<Arch, std::string> archToString = {
+        {x86, "x86"},
+        {x86_64, "x64"},
+        {aarch64, "arm64"},
+        {noarch, "noarch"}
+    };
 
-    std::string get_arch(arch &arch);
+    const std::unordered_map<Platform, std::string> platformToString = {
+        {Windows, "windows"},
+        {Linux, "linux"},
+        {Unix, "unix"},
+        {Darwin, "darwin"},
+        {Unknown, "unknown"},
+        {Any, "any"}
+    };
+
+    inline std::string get_arch(const Arch &arch) {
+        return archToString.at(arch);
+    }
+
+    inline std::string get_platform(const Platform &platform) {
+        return platformToString.at(platform);
+    }
 }
 
 #endif //M_OS_HPP

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/PkFramework.iml" filepath="$PROJECT_DIR$/.idea/PkFramework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PkFramework2.iml" filepath="$PROJECT_DIR$/.idea/PkFramework2.iml" />
     </modules>
   </component>
 </project>

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.29)
 
 project(PkFramework VERSION 2.0.0 LANGUAGES CXX)
 
@@ -36,6 +36,14 @@ add_library(PkFramework SHARED
         src/pk/core/Package.cpp
         src/pk/core/ConfigProvider.cpp
         src/pk/core/Repository.cpp
+        src/pk/core/Utils.cpp
+        src/include/helper_cli.hpp
+        src/include/m_config.hpp
+        src/include/m_os.hpp
+        src/include/m_package.hpp
+        src/include/m_repository.hpp
+        src/include/PkFramework.hpp
+        src/include/utils.hpp
 )
 
 set_target_properties(PkFramework PROPERTIES

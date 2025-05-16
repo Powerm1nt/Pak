@@ -16,24 +16,26 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PKFRAMEWORK_LIBRARY_H
-#define PKFRAMEWORK_LIBRARY_H
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
-#include "helper_cli.hpp"
-#include "m_config.hpp"
-#include "m_repository.hpp"
-#include "m_package.hpp"
-#include "utils.hpp"
+#include <string>
+#include <vector>
 
-namespace Pk {
-    class PkFramework {
-        std::unique_ptr<ConfigProvider> config;
+namespace Utils {
+    std::vector<std::string> listFilesRecursively(const std::string &parent,
+                                                  const std::vector<std::string> &directories);
 
-    public:
-        PkFramework();
+    std::string calculateBitrate(const size_t &bytesDownloaded, const double &downloadTimeSeconds);
 
-        ~PkFramework() = default;
-    };
+    std::string formatTime(const int &seconds);
+
+    std::string decodeToken(const std::string &token);
+
+    bool validateArch(const std::string &arch);
+
+    bool validatePlatform(const std::string &platform);
 }
 
-#endif //PKFRAMEWORK_LIBRARY_H
+
+#endif //UTILS_HPP

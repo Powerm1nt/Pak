@@ -31,12 +31,12 @@ namespace Pk {
         std::string created_at,
         std::string install_location,
 
-        const Platforms::arch &arch,
-        const Platforms::platform &platform,
+        const Platforms::Arch &arch,
+        const Platforms::Platform &platform,
 
         const std::vector<std::string> &files,
 
-        bool restart_required
+        const bool restart_required
     )
         : name(std::move(name)),
           version(std::move(version)),

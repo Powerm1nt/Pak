@@ -15,79 +15,96 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "m_config.hpp"
-#include <fstream>
-#include <stdlib.h>
+#include <direct.h>
 #include <json/json.h>
 
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
+
+#include "m_config.hpp"
+
 namespace Pk {
-    using namespace std;
-
-    string ConfigProvider::get_env_value(const string &key) {
+	std::string ConfigProvider::get_env_value(const std::string& key) {
 #ifdef WIN32
-        char *value = nullptr;
-        size_t size = 0;
+		char* value = nullptr;
+		size_t size = 0;
 
-        if (_dupenv_s(&value, &size, key.c_str()) == 0 && value != nullptr) {
-            string result(value);
-            free(value);
-            return result;
-        }
+		if (_dupenv_s(&value, &size, key.c_str()) == 0 && value != nullptr) {
+			std::string result(value);
+			free(value);
+			return result;
+		}
 #else
-        if (const char *value = secure_getenv(key.c_str()); value != nullptr) {
-            return value;
-        }
+		if (const char* value = secure_getenv(key.c_str()); value != nullptr) {
+			return value;
+		}
 #endif
-        return "";
-    }
+		return "";
+	}
 
-    void ConfigProvider::set_token(const string &new_token) {
-        token = new_token;
-    }
+	void ConfigProvider::set_token(const std::string& new_token) {
+		token = new_token;
+	}
 
-    void ConfigProvider::set_config_dir(const string &new_config_dir) {
-        config_dir = make_unique<string>(new_config_dir);
-    }
+	void ConfigProvider::set_config_dir(const std::string& new_config_dir) {
+		config_dir = make_unique<std::string>(new_config_dir);
+	}
 
-    bool ConfigProvider::load_config(const string &file_path) {
-        ifstream config_file(file_path, ifstream::binary);
-        if (!config_file.is_open()) {
-            return false; // Error: Cannot open config file
-        }
+	bool ConfigProvider::init_config_dir() {
+		if (!config_dir || config_dir->empty()) {
+			throw std::runtime_error("Configuration directory is invalid or missing");
+		}
 
-        Json::Value root;
-        Json::CharReaderBuilder reader;
-        string errs;
+		if (_mkdir(config_dir->c_str()) == -1 && errno != EEXIST) {
+			std::cout << "Configuration directory is empty, using default."
+				<< std::endl;
+			return false;  // Directory already exists  
+		}
 
-        if (!Json::parseFromStream(reader, config_file, &root, &errs)) {
-            return false; // Error parsing JSON
-        }
+		return true;
+	}
 
-        if (root.isMember("token")) {
-            token = root["token"].asString();
-        }
-        if (root.isMember("config_dir")) {
-            config_dir = make_unique<string>(root["config_dir"].asString());
-        }
+	bool ConfigProvider::load_config(const std::string& file_path) {
+		std::ifstream config_file(file_path, std::ifstream::binary);
+		if (!config_file.is_open()) {
+			throw std::runtime_error("Cannot open config file");
+		}
 
-        return true;
-    }
+		Json::Value root;
+		Json::CharReaderBuilder reader;
+		std::string errors;
 
-    bool ConfigProvider::save_config(const string &file_path) const {
-        Json::Value root;
-        root["token"] = token;
-        if (config_dir) {
-            root["config_dir"] = *config_dir;
-        }
+		if (!Json::parseFromStream(reader, config_file, &root, &errors)) {
+			throw std::runtime_error("Error parsing JSON");
+		}
 
-        ofstream config_file(file_path, ofstream::binary);
-        if (!config_file.is_open()) {
-            return false; // Error: Cannot open config file for writing
-        }
+		if (root.isMember("token")) {
+			token = root["token"].asString();
+		}
+		if (root.isMember("config_dir")) {
+			config_dir = make_unique<std::string>(root["config_dir"].asString());
+		}
 
-        Json::StreamWriterBuilder writer;
-        config_file << Json::writeString(writer, root);
+		return true;
+	}
 
-        return true;
-    }
-} // namespace Pk
+	bool ConfigProvider::save_config(const std::string& file_path) const {
+		Json::Value root;
+		root["token"] = token;
+		if (config_dir) {
+			root["config_dir"] = *config_dir;
+		}
+
+		std::ofstream config_file(file_path, std::ofstream::binary);
+		if (!config_file.is_open()) {
+			return false;  // Error: Cannot open config file for writing
+		}
+
+		Json::StreamWriterBuilder writer;
+		config_file << Json::writeString(writer, root);
+
+		return true;
+	}
+}  // namespace Pk
