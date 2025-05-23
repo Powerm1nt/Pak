@@ -21,6 +21,8 @@
 
 #include <string>
 #include <vector>
+#include <filesystem>
+#include <fstream>
 
 namespace Utils {
     std::vector<std::string> listFilesRecursively(const std::string &parent,
@@ -35,6 +37,18 @@ namespace Utils {
     bool validateArch(const std::string &arch);
 
     bool validatePlatform(const std::string &platform);
+
+    inline std::streampos fileSize(const char *filePath) {
+        std::streampos fsize = 0;
+        std::ifstream file(filePath, std::ios::binary);
+
+        fsize = file.tellg();
+        file.seekg(0, std::ios::end);
+        fsize = file.tellg() - fsize;
+        file.close();
+
+        return fsize;
+    }
 }
 
 
