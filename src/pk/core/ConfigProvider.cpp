@@ -79,6 +79,7 @@ namespace Pk {
 			!config_file.is_open() || Utils::fileSize(file_path.c_str()) == 0 ||
 			!Json::parseFromStream(reader, config_file, &root, &errors) || root.empty()) {
 			root["token"] = "";
+			root["config_dir"] = "";
 
 			Json::StreamWriterBuilder builder;
 
