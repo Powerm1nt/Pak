@@ -29,7 +29,7 @@ namespace Pk {
 		const std::filesystem::path appdata =
 			ConfigProvider::get_env_value("APPDATA");
 #else
-		const filesystem::path appdata = ConfigProvider::get_env_value("HOME");
+		const std::filesystem::path appdata = ConfigProvider::get_env_value("HOME");
 #endif  // WIN32
 
 		const std::filesystem::path& wdir = "pakagify";
