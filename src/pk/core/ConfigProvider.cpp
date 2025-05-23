@@ -15,18 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <direct.h>
 #include <json/json.h>
 
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 
 #include "m_config.hpp"
+#include "utils.hpp"
 
 namespace Pk {
-	std::string ConfigProvider::get_env_value(const std::string& key) {
+	std::string ConfigProvider::get_env_value(const std::string &key) {
 #ifdef WIN32
 		char* value = nullptr;
 		size_t size = 0;
@@ -37,18 +38,18 @@ namespace Pk {
 			return result;
 		}
 #else
-		if (const char* value = secure_getenv(key.c_str()); value != nullptr) {
+		if (const char *value = secure_getenv(key.c_str()); value != nullptr) {
 			return value;
 		}
 #endif
 		return "";
 	}
 
-	void ConfigProvider::set_token(const std::string& new_token) {
+	void ConfigProvider::set_token(const std::string &new_token) {
 		token = new_token;
 	}
 
-	void ConfigProvider::set_config_dir(const std::string& new_config_dir) {
+	void ConfigProvider::set_config_dir(const std::string &new_config_dir) {
 		config_dir = make_unique<std::string>(new_config_dir);
 	}
 
@@ -57,27 +58,37 @@ namespace Pk {
 			throw std::runtime_error("Configuration directory is invalid or missing");
 		}
 
-		if (_mkdir(config_dir->c_str()) == -1 && errno != EEXIST) {
+		if (!std::filesystem::create_directory(config_dir->c_str()) && errno != EEXIST) {
 			std::cout << "Configuration directory is empty, using default."
-				<< std::endl;
-			return false;  // Directory already exists  
+					<< std::endl;
+			return false; // Directory already exists
 		}
 
 		return true;
 	}
 
-	bool ConfigProvider::load_config(const std::string& file_path) {
-		std::ifstream config_file(file_path, std::ifstream::binary);
-		if (!config_file.is_open()) {
-			throw std::runtime_error("Cannot open config file");
-		}
-
+	bool ConfigProvider::load_config(const std::string &file_path) {
 		Json::Value root;
-		Json::CharReaderBuilder reader;
 		std::string errors;
 
-		if (!Json::parseFromStream(reader, config_file, &root, &errors)) {
-			throw std::runtime_error("Error parsing JSON");
+		std::ifstream config_file(file_path, std::ifstream::binary);
+
+		// We create a new file with a fresh new config if empty
+		if (
+			Json::CharReaderBuilder reader;
+			!config_file.is_open() || Utils::fileSize(file_path.c_str()) == 0 ||
+			!Json::parseFromStream(reader, config_file, &root, &errors) || root.empty()) {
+			root["token"] = "";
+
+			Json::StreamWriterBuilder builder;
+
+			std::ofstream new_config_file(file_path, std::ios::binary);
+
+			new_config_file << Json::writeString(builder, root);
+		}
+
+		if (root.empty()) {
+			std::cout << "Config is empty" << std::endl;
 		}
 
 		if (root.isMember("token")) {
@@ -90,7 +101,7 @@ namespace Pk {
 		return true;
 	}
 
-	bool ConfigProvider::save_config(const std::string& file_path) const {
+	bool ConfigProvider::save_config(const std::string &file_path) const {
 		Json::Value root;
 		root["token"] = token;
 		if (config_dir) {
@@ -99,7 +110,7 @@ namespace Pk {
 
 		std::ofstream config_file(file_path, std::ofstream::binary);
 		if (!config_file.is_open()) {
-			return false;  // Error: Cannot open config file for writing
+			return false; // Error: Cannot open config file for writing
 		}
 
 		Json::StreamWriterBuilder writer;
@@ -107,4 +118,4 @@ namespace Pk {
 
 		return true;
 	}
-}  // namespace Pk
+} // namespace Pk
