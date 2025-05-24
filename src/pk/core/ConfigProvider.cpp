@@ -37,13 +37,12 @@ namespace Pk {
 			free(value);
 			return result;
 		}
-#elifdef TARGET_OS_OSX
-		if (const char *value = getenv(key.c_str()); value != nullptr) {
+#elifdef LINUX
+		if (const char *value = secure_getenv(key.c_str()); value != nullptr) {
 			return value;
 		}
-
 #else
-		if (const char *value = secure_getenv(key.c_str()); value != nullptr) {
+		if (const char *value = getenv(key.c_str()); value != nullptr) {
 			return value;
 		}
 #endif
