@@ -32,13 +32,13 @@ namespace Pk {
 
         const std::vector<Package> &packages
     )
-        : name(move(name)),
-          description(move(description)),
-          author(move(author)),
-          url(move(url)),
-          last_updated(move(last_updated)),
-          created_at(move(created_at)),
-          license(move(license)),
+        : name(std::move(name)),
+          description(std::move(description)),
+          author(std::move(author)),
+          url(std::move(url)),
+          last_updated(std::move(last_updated)),
+          created_at(std::move(created_at)),
+          license(std::move(license)),
           packages(packages) {
     }
 
