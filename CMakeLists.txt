@@ -44,6 +44,11 @@ add_library(PkFramework SHARED
         src/include/m_repository.hpp
         src/include/PkFramework.hpp
         src/include/utils.hpp
+        src/include/pak_file.hpp
+        src/include/m_file.hpp
+        src/pk/core/File.cpp
+        src/pk/core/SQLiteTransation.cpp
+        src/include/database.hpp
 )
 
 set_target_properties(PkFramework PROPERTIES
@@ -60,6 +65,7 @@ target_include_directories(PkFramework PUBLIC
 
 find_package(jsoncpp CONFIG REQUIRED)
 find_package(argh CONFIG REQUIRED)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
 
 set_target_properties(JsonCpp::JsonCpp PROPERTIES
         CXX_STANDARD 23
@@ -70,7 +76,7 @@ set_target_properties(JsonCpp::JsonCpp PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
-target_link_libraries(PkFramework PRIVATE JsonCpp::JsonCpp argh)
+target_link_libraries(PkFramework PRIVATE JsonCpp::JsonCpp argh unofficial::sqlite3::sqlite3)
 
 set_target_properties(PkFramework PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin

@@ -33,10 +33,10 @@ namespace Pk {
             std::string url,
             std::string last_updated,
             std::string created_at,
-            std::string license,
 
             const std::vector<Package> &packages
         );
+
 
         ~Repository();
 
@@ -46,10 +46,10 @@ namespace Pk {
         const std::string &get_url() const { return url; }
         const std::string &get_last_updated() const { return last_updated; }
         const std::string &get_created_at() const { return created_at; }
-        const std::string &get_license() const { return license; }
 
         const std::vector<Package> &get_packages() const { return packages; }
 
+        std::string toSQL() const;
     private:
         std::string name;
         std::string description;
@@ -57,7 +57,6 @@ namespace Pk {
         std::string url;
         std::string last_updated;
         std::string created_at;
-        std::string license;
 
         std::vector<Package> packages;
     };

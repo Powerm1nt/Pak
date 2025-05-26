@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sqlite3.h>
 #include <utility>
 
 #include "m_package.hpp"
@@ -26,29 +27,55 @@ namespace Pk {
         std::string version,
         std::string description,
         std::string author,
-        std::string release_url,
         std::string last_updated,
         std::string created_at,
         std::string install_location,
+        std::string license,
+
+        uint repository,
 
         const Platforms::Arch &arch,
         const Platforms::Platform &platform,
 
-        const std::vector<std::string> &files,
-
-        const bool restart_required
+        const std::vector<File> &files
     )
         : name(std::move(name)),
           version(std::move(version)),
           description(std::move(description)),
           author(std::move(author)),
-          release_url(std::move(release_url)),
           last_updated(std::move(last_updated)),
           created_at(std::move(created_at)),
           install_location(std::move(install_location)),
+          license(std::move(license)),
           arch(arch),
           platform(platform),
-          files(files),
-          restart_required(restart_required) {
+          repository(std::move(repository)),
+          files(files) {
     }
+
+    Package::~Package() = default;
+
+    std::string Package::toSQL() const {
+        char *sql_raw = sqlite3_mprintf(
+            "INSERT INTO packages (name, version, description, author, install_location, license, arch, platform, last_updated, created_at, repository) "
+            "VALUES ('%q', '%q', '%q', '%q', '%q', '%q', '%q', '%q', %lld, %lld, %lld);",
+            name.c_str(),
+            version.c_str(),
+            description.c_str(),
+            author.c_str(),
+            install_location.c_str(),
+            license.c_str(),
+            Platforms::archToString.at(arch).c_str(),
+            Platforms::platformToString.at(platform).c_str(),
+            last_updated,
+            created_at,
+            repository
+        );
+
+        std::string sql(sql_raw);
+        sqlite3_free(sql_raw);
+
+        return sql;
+    }
+
 } // namespace Pk

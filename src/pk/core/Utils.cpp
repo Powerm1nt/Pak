@@ -54,7 +54,7 @@ namespace Utils {
         return fileList;
     }
 
-    std::string calculateBitrate(const size_t &bytesDownloaded, const double &downloadTimeSeconds) {
+    std::string calculateBitrate(const double &bytesDownloaded, const double &downloadTimeSeconds) {
         const double bytesPerSecond = bytesDownloaded / downloadTimeSeconds;
         const double megabytesPerSecond = bytesPerSecond / (1024.0 * 1024.0);
 
@@ -87,7 +87,7 @@ namespace Utils {
     std::string decodeToken(const std::string &token) {
         try {
             std::vector<unsigned char> decodedTok = cppcodec::base64_rfc4648::decode(token);
-            return std::string(decodedTok.begin(), decodedTok.end());
+            return {decodedTok.begin(), decodedTok.end()};
         } catch (const std::exception &e) {
             std::cerr << "Error decoding Base64: " << e.what() << std::endl;
             return "";

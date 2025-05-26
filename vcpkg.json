@@ -5,6 +5,7 @@
     "argh",
     "jsoncpp",
     "cppcodec",
-    "curl"
+    "curl",
+    "sqlite3"
   ]
 }

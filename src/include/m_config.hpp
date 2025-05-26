@@ -41,7 +41,7 @@ namespace Pk {
 		bool load_config(const std::string& file_path);
 
 		bool save_config(const std::string& file_path) const;
-		bool init_config_dir();
+		bool init_config_dir() const;
 
 	private:
 		std::string token;

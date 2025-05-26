@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sqlite3.h>
 #include <utility>
 
 #include "m_repository.hpp"
@@ -28,7 +29,6 @@ namespace Pk {
         std::string url,
         std::string last_updated,
         std::string created_at,
-        std::string license,
 
         const std::vector<Package> &packages
     )
@@ -38,8 +38,25 @@ namespace Pk {
           url(std::move(url)),
           last_updated(std::move(last_updated)),
           created_at(std::move(created_at)),
-          license(std::move(license)),
           packages(packages) {
+    }
+
+    std::string Repository::toSQL() const {
+        char *sql_raw = sqlite3_mprintf(
+            "INSERT INTO repositories (name, description, author, url, last_updated, created_at) "
+            "VALUES ('%q', '%q', '%q', '%q', %lld, %lld);",
+            name.c_str(),
+            description.c_str(),
+            author.c_str(),
+            url.c_str(),
+            last_updated,
+            created_at
+        );
+
+        std::string sql(sql_raw);
+        sqlite3_free(sql_raw);
+
+        return sql;
     }
 
     Repository::~Repository() = default;

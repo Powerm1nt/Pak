@@ -57,7 +57,7 @@ namespace Pk {
 		config_dir = make_unique<std::string>(new_config_dir);
 	}
 
-	bool ConfigProvider::init_config_dir() {
+	bool ConfigProvider::init_config_dir() const {
 		if (!config_dir || config_dir->empty()) {
 			throw std::runtime_error("Configuration directory is invalid or missing");
 		}
