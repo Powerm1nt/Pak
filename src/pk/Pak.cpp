@@ -148,16 +148,16 @@ namespace Pk {
 		const std::unique_ptr<Package> &package
 	) {
 		std::vector<char> body = {};
+		uint64_t pNum = 0;
 
 		for (const std::string &fpath: file_list) {
 			try {
-				uint64_t pNum = 0;
 				constexpr u_int32_t alignment = 4;
 				std::string fname = fpath.substr(pkg_dir.size() + 1);
 
 				std::vector<char> file = read_file(fpath);
 				std::vector<char> zFile = compress_data(file);
-				uLong crc32 = compute_crc32(zFile);
+				const uLong crc32 = compute_crc32(zFile);
 
 				body.insert(body.end(), zFile.begin(), zFile.end());
 
@@ -202,9 +202,10 @@ namespace Pk {
 
 				// We recalculate the computed size into the header
 				calculate_header_sizes(header, size, compressed_size, header.metadata_size);
+
 				pNum++;
 			} catch (std::exception &error) {
-				std::cerr << "Critical: Failed to read file: " << error.what() << std::endl;
+				std::cerr << "Critical: Failed to create file: " << error.what() << std::endl;
 				throw;
 			}
 		}
@@ -233,7 +234,7 @@ namespace Pk {
 		const std::unique_ptr<Package> &package,
 		const std::unique_ptr<Repository> &repository
 	) {
-		PakFile headerObj = {
+		PakFile _headerObj = {
 			.magic = 0x50414B, // "PAK"
 			.version = 1,
 			.header_size = sizeof(PakFile),
@@ -243,7 +244,7 @@ namespace Pk {
 			.body_decompressed_size = 0
 		};
 
-		PakFile &header = headerObj;
+		PakFile &header = _headerObj;
 
 		std::ofstream pak_file(image_path, std::ios::binary);
 		// const u_int32_t header_size = sizeof(PakFile);
