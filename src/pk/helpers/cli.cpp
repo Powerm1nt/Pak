@@ -1,5 +1,5 @@
 /**
-* Pakagify, PkFramework, PkCli
+* Pakagify, Pak, PkCli
 * Copyright (C) 2025 NukaWorks
 *
 * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <PkFramework.hpp>
+#include <Pak.hpp>
 
 #include <iostream>
 int authCmd(const std::string& token, bool debugMode) {

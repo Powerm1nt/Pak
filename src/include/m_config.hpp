@@ -1,5 +1,5 @@
 /*
- * Pakagify, PkFramework, PkCli
+ * Pakagify, Pak, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,22 +25,23 @@
 namespace Pk {
 	class ConfigProvider {
 	public:
-		const std::string& get_token() const { return token; }
-		const std::string& get_config_file() const { return config_file; }
+		const std::string &get_token() const { return token; }
+		const std::string &get_config_file() const { return config_file; }
 
-		const std::string* get_config_dir() const {
+		const std::string *get_config_dir() const {
 			return config_dir ? config_dir.get() : nullptr;
 		}
 
-		static std::string get_env_value(const std::string& key);
+		static std::string get_env_value(const std::string &key);
 
-		void set_token(const std::string& token);
+		void set_token(const std::string &token);
 
-		void set_config_dir(const std::string& config_dir);
+		void set_config_dir(const std::string &config_dir);
 
-		bool load_config(const std::string& file_path);
+		bool load_config(const std::string &file_path);
 
-		bool save_config(const std::string& file_path) const;
+		bool save_config(const std::string &file_path) const;
+
 		bool init_config_dir() const;
 
 	private:
@@ -48,6 +49,6 @@ namespace Pk {
 		std::string config_file;
 		std::unique_ptr<std::string> config_dir;
 	};
-}  // namespace Pk
+} // namespace Pk
 
 #endif  // CONFIG_PROVIDER_HPP

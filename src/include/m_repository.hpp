@@ -1,5 +1,5 @@
 /**
-* Pakagify, PkFramework, PkCli
+* Pakagify, Pak, PkCli
 * Copyright (C) 2025 NukaWorks
 *
 * This program is free software: you can redistribute it and/or modify
@@ -31,10 +31,10 @@ namespace Pk {
             std::string description,
             std::string author,
             std::string url,
-            std::string last_updated,
-            std::string created_at,
+            uint64_t last_updated,
+            uint64_t created_at,
 
-            const std::vector<Package> &packages
+            const std::vector<Package *> &packages
         );
 
 
@@ -44,21 +44,23 @@ namespace Pk {
         const std::string &get_description() const { return description; }
         const std::string &get_author() const { return author; }
         const std::string &get_url() const { return url; }
-        const std::string &get_last_updated() const { return last_updated; }
-        const std::string &get_created_at() const { return created_at; }
+        uint64_t get_last_updated() const { return last_updated; }
+        uint64_t get_created_at() const { return created_at; }
 
-        const std::vector<Package> &get_packages() const { return packages; }
+        const std::vector<Package *> &get_packages() const { return packages; }
 
         std::string toSQL() const;
+
     private:
         std::string name;
         std::string description;
         std::string author;
         std::string url;
-        std::string last_updated;
-        std::string created_at;
 
-        std::vector<Package> packages;
+        uint64_t last_updated;
+        uint64_t created_at;
+
+        std::vector<Package *> packages;
     };
 } // namespace Pk
 

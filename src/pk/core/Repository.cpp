@@ -1,5 +1,5 @@
 /*
- * Pakagify, PkFramework, PkCli
+ * Pakagify, Pak, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,10 +27,11 @@ namespace Pk {
         std::string description,
         std::string author,
         std::string url,
-        std::string last_updated,
-        std::string created_at,
 
-        const std::vector<Package> &packages
+        uint64_t last_updated,
+        uint64_t created_at,
+
+        const std::vector<Package *> &packages
     )
         : name(std::move(name)),
           description(std::move(description)),

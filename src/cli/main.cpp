@@ -1,5 +1,5 @@
 /**
-* Pakagify, PkFramework, PkCli
+* Pakagify, Pak, PkCli
 * Copyright (C) 2025 NukaWorks
 *
 * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #include <iostream>
 #include <string>
 #include <argh.h>
-#include <PkFramework.hpp>
+#include <Pak.hpp>
 #include <unordered_map>
 
 enum class Command {
@@ -61,9 +61,9 @@ Command getCommand(const std::string &cmd) {
 
 
 int main(int argc, char *argv[]) {
-    // Testing PkFramework
+    // Testing Pak
 
-    auto pktest = new Pk::PkFramework();
+    auto pktest = new Pk::Pak();
 
     argh::parser cmdl;
 

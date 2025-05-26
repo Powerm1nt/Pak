@@ -1,11 +1,12 @@
 {
-  "name": "pkframework",
+  "name": "pak",
   "version": "2.0.0",
   "dependencies": [
     "argh",
     "jsoncpp",
     "cppcodec",
     "curl",
-    "sqlite3"
+    "sqlite3",
+    "zlib"
   ]
 }

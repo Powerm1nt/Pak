@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.29)
 
-project(PkFramework VERSION 2.0.0 LANGUAGES CXX)
+project(Pak VERSION 2.0.0 LANGUAGES CXX)
 
 if (WIN32)
     set(VCPKG_OS "windows")
@@ -30,8 +30,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_TOOLCHAIN_FILE "~/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/vcpkg_installed/${ARCH}-${VCPKG_OS}")
 
-add_library(PkFramework SHARED
-        src/pk/PkFramework.cpp
+add_library(Pak SHARED
+        src/pk/Pak.cpp
         src/pk/helpers/cli.cpp
         src/pk/core/Package.cpp
         src/pk/core/ConfigProvider.cpp
@@ -42,23 +42,24 @@ add_library(PkFramework SHARED
         src/include/m_os.hpp
         src/include/m_package.hpp
         src/include/m_repository.hpp
-        src/include/PkFramework.hpp
+        src/include/Pak.hpp
         src/include/utils.hpp
         src/include/pak_file.hpp
         src/include/m_file.hpp
         src/pk/core/File.cpp
-        src/pk/core/SQLiteTransation.cpp
+        src/pk/core/SQLiteTransaction.cpp
         src/include/database.hpp
+        src/include/fileutils.hpp
 )
 
-set_target_properties(PkFramework PROPERTIES
+set_target_properties(Pak PROPERTIES
         WINDOWS_EXPORT_ALL_SYMBOLS TRUE
         POSITION_INDEPENDENT_CODE ON
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
 )
 
-# Include directories for PkFramework
-target_include_directories(PkFramework PUBLIC
+# Include directories for Pak
+target_include_directories(Pak PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src/include>
         $<INSTALL_INTERFACE:include>
 )
@@ -66,6 +67,7 @@ target_include_directories(PkFramework PUBLIC
 find_package(jsoncpp CONFIG REQUIRED)
 find_package(argh CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
+find_package(ZLIB REQUIRED)
 
 set_target_properties(JsonCpp::JsonCpp PROPERTIES
         CXX_STANDARD 23
@@ -76,19 +78,24 @@ set_target_properties(JsonCpp::JsonCpp PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
-target_link_libraries(PkFramework PRIVATE JsonCpp::JsonCpp argh unofficial::sqlite3::sqlite3)
+target_link_libraries(Pak PRIVATE
+        JsonCpp::JsonCpp
+        argh
+        unofficial::sqlite3::sqlite3
+        ZLIB::ZLIB
+)
 
-set_target_properties(PkFramework PROPERTIES
+set_target_properties(Pak PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
 )
 
 if (WIN32)
-    add_custom_command(TARGET PkFramework POST_BUILD
+    add_custom_command(TARGET Pak POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_RUNTIME_DLLS:PkFramework>
-            $<TARGET_FILE_DIR:PkFramework>
+            $<TARGET_RUNTIME_DLLS:Pak>
+            $<TARGET_FILE_DIR:Pak>
     )
 endif ()
 

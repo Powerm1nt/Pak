@@ -1,5 +1,5 @@
 /*
- * Pakagify, PkFramework, PkCli
+ * Pakagify, Pak, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,22 +41,21 @@ namespace Pk {
         uint64_t last_updated,
         uint64_t created_at,
         uint64_t package
-    ):
-        filename(std::move(filename)),
-        path(std::move(path)),
-        symlink_path(std::move(symlink_path)),
-        crc32(std::move(crc32)),
-        size(std::move(size)),
-        compressed_size(std::move(compressed_size)),
-        offset_start(std::move(offset_start)),
-        offset_end(std::move(offset_end)),
-        chunk_size(std::move(chunk_size)),
-        chunk_count(std::move(chunk_count)),
-        attributes(std::move(attributes)),
-        last_updated(std::move(last_updated)),
-        created_at(std::move(created_at)),
-        package(std::move(package))
-    {}
+    ): filename(std::move(filename)),
+       path(std::move(path)),
+       symlink_path(std::move(symlink_path)),
+       crc32(std::move(crc32)),
+       size(std::move(size)),
+       compressed_size(std::move(compressed_size)),
+       offset_start(std::move(offset_start)),
+       offset_end(std::move(offset_end)),
+       chunk_size(std::move(chunk_size)),
+       chunk_count(std::move(chunk_count)),
+       attributes(std::move(attributes)),
+       last_updated(std::move(last_updated)),
+       created_at(std::move(created_at)),
+       package(std::move(package)) {
+    }
 
     File::~File() = default;
 

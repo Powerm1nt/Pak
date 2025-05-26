@@ -12,21 +12,22 @@ namespace Pk {
     class Package {
     public:
         Package(
-                std::string name,
-                std::string version,
-                std::string description,
-                std::string author,
-                std::string last_updated,
-                std::string created_at,
-                std::string install_location,
-                std::string license,
+            std::string name,
+            std::string version,
+            std::string description,
+            std::string author,
+            std::string install_location,
+            std::string license,
 
-                uint repository,
+            uint repository,
 
-                const Platforms::Arch &arch,
-                const Platforms::Platform &platform,
+            uint64_t last_updated,
+            uint64_t created_at,
 
-                const std::vector<File> &files
+            const Platforms::Arch &arch,
+            const Platforms::Platform &platform,
+
+            const std::vector<File> &files
         );
 
         ~Package();
@@ -35,8 +36,10 @@ namespace Pk {
         const std::string &get_version() const { return version; }
         const std::string &get_description() const { return description; }
         const std::string &get_author() const { return author; }
-        const std::string &get_last_updated() const { return last_updated; }
-        const std::string &get_created_at() const { return created_at; }
+
+        uint64_t get_last_updated() const { return last_updated; }
+        uint64_t get_created_at() const { return created_at; }
+
         const std::string &get_install_location() const { return install_location; }
         const std::string &get_license() const { return license; }
 
@@ -53,8 +56,6 @@ namespace Pk {
         std::string version;
         std::string description;
         std::string author;
-        std::string last_updated;
-        std::string created_at;
         std::string install_location;
         std::string license;
 
@@ -62,6 +63,9 @@ namespace Pk {
         Platforms::Platform platform;
 
         uint repository;
+
+        uint64_t last_updated;
+        uint64_t created_at;
 
         std::vector<File> files;
 

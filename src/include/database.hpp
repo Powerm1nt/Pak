@@ -1,5 +1,5 @@
 /*
- * Pakagify, PkFramework, PkCli
+ * Pakagify, Pak, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,14 +24,15 @@
 #include <string>
 
 class SQLiteTransaction {
-    sqlite3* db;
-    char* errmsg;
+    sqlite3 *db;
+    char *errmsg;
 
 public:
-    explicit SQLiteTransaction(sqlite3* db);
+    explicit SQLiteTransaction(sqlite3 *db);
+
     ~SQLiteTransaction();
 
-    void execute(const std::string& sql);
+    void execute(const std::string &sql);
 };
 
 #endif //DATABASE_HPP

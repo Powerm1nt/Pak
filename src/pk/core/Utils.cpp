@@ -1,5 +1,5 @@
 /**
-* Pakagify, PkFramework, PkCli
+* Pakagify, Pak, PkCli
 * Copyright (C) 2025 NukaWorks
 *
 * This program is free software: you can redistribute it and/or modify
@@ -30,15 +30,12 @@
 namespace Utils {
     namespace fs = std::filesystem;
 
-    std::vector<std::string> listFilesRecursively(
-        const std::string &parent,
-        const std::vector<std::string> &directories
-    ) {
+    std::vector<std::string> listFilesRecursively(const std::string &source) {
         std::vector<std::string> fileList;
 
-        for (const auto &element: directories) {
+        for (const auto &element: source) {
             if (
-                fs::path fullPath = fs::path(parent) / element;
+                fs::path fullPath = &element;
                 fs::is_directory(fullPath)
             ) {
                 for (const auto &entry: fs::recursive_directory_iterator(fullPath)) {

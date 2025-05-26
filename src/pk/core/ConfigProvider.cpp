@@ -1,5 +1,5 @@
 /*
- * Pakagify, PkFramework, PkCli
+ * Pakagify, Pak, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 #include <stdexcept>
 
 #include "m_config.hpp"
-#include "utils.hpp"
+#include "fileutils.hpp"
 
 namespace Pk {
 	std::string ConfigProvider::get_env_value(const std::string &key) {
@@ -80,7 +80,7 @@ namespace Pk {
 		// We create a new file with a fresh new config if empty
 		if (
 			Json::CharReaderBuilder reader;
-			!config_file.is_open() || Utils::fileSize(file_path.c_str()) == 0 ||
+			!config_file.is_open() || get_file_size(file_path.c_str()) == 0 ||
 			!Json::parseFromStream(reader, config_file, &root, &errors) || root.empty()) {
 			root["token"] = "";
 			root["config_dir"] = "";

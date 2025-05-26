@@ -1,5 +1,5 @@
 /*
- * Pakagify, PkFramework, PkCli
+ * Pakagify, Pak, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,12 +27,13 @@ namespace Pk {
         std::string version,
         std::string description,
         std::string author,
-        std::string last_updated,
-        std::string created_at,
         std::string install_location,
         std::string license,
 
         uint repository,
+
+        uint64_t last_updated,
+        uint64_t created_at,
 
         const Platforms::Arch &arch,
         const Platforms::Platform &platform,
@@ -43,13 +44,13 @@ namespace Pk {
           version(std::move(version)),
           description(std::move(description)),
           author(std::move(author)),
-          last_updated(std::move(last_updated)),
-          created_at(std::move(created_at)),
           install_location(std::move(install_location)),
           license(std::move(license)),
           arch(arch),
           platform(platform),
           repository(std::move(repository)),
+          last_updated(std::move(last_updated)),
+          created_at(std::move(created_at)),
           files(files) {
     }
 
@@ -77,5 +78,4 @@ namespace Pk {
 
         return sql;
     }
-
 } // namespace Pk

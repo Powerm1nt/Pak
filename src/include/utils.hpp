@@ -1,5 +1,5 @@
 /**
-* Pakagify, PkFramework, PkCli
+* Pakagify, Pak, PkCli
 * Copyright (C) 2025 NukaWorks
 *
 * This program is free software: you can redistribute it and/or modify
@@ -21,14 +21,11 @@
 
 #include <string>
 #include <vector>
-#include <filesystem>
-#include <fstream>
 
 namespace Utils {
-    std::vector<std::string> listFilesRecursively(const std::string &parent,
-                                                  const std::vector<std::string> &directories);
+    std::vector<std::string> listFilesRecursively(const std::string &source);
 
-    std::string calculateBitrate(const size_t &bytesDownloaded, const double &downloadTimeSeconds);
+    std::string calculateBitrate(const double &bytesDownloaded, const double &downloadTimeSeconds);
 
     std::string formatTime(const int &seconds);
 
@@ -37,18 +34,6 @@ namespace Utils {
     bool validateArch(const std::string &arch);
 
     bool validatePlatform(const std::string &platform);
-
-    inline std::streampos fileSize(const char *filePath) {
-        std::streampos fsize = 0;
-        std::ifstream file(filePath, std::ios::binary);
-
-        fsize = file.tellg();
-        file.seekg(0, std::ios::end);
-        fsize = file.tellg() - fsize;
-        file.close();
-
-        return fsize;
-    }
 }
 
 

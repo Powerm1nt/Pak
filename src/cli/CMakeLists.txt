@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(PkCli main.cpp)
 
-target_link_libraries(PkCli PRIVATE PkFramework argh)
+target_link_libraries(PkCli PRIVATE Pak argh)
 
 set_target_properties(PkCli PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin

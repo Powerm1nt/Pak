@@ -1,5 +1,5 @@
 /*
- * Pakagify, PkFramework, PkCli
+ * Pakagify, Pak, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@
 
 #include "database.hpp"
 
-SQLiteTransaction::SQLiteTransaction(sqlite3* db)
-: db(db), errmsg(nullptr) {
+SQLiteTransaction::SQLiteTransaction(sqlite3 *db)
+    : db(db), errmsg(nullptr) {
     if (!db) {
         throw std::invalid_argument("Database pointer cannot be null");
     }
