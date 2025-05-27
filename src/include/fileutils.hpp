@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HELPER_ZLIB_HPP
-#define HELPER_ZLIB_HPP
+#ifndef FILEUTILS_HPP
+#define FILEUTILS_HPP
 
 #include <zlib.h>
 
@@ -133,6 +133,19 @@ inline bool write_file(const std::string &filepath, const std::vector<char> &dat
     return true;
 }
 
+inline void writeAlignedData(std::ofstream &file, const char *data, const size_t dataSize, const uint32_t alignment) {
+    if (!file.write(data, dataSize)) {
+        throw std::runtime_error("Failed to write compressed data to file");
+    }
+
+    if (const size_t paddingSize = (alignment - dataSize % alignment) % alignment; paddingSize > 0) {
+        const std::vector<char> padding(paddingSize, 0);
+        if (!file.write(padding.data(), paddingSize)) {
+            throw std::runtime_error("Failed to write padding to file");
+        }
+    }
+}
+
 // inline uint get_file_permissions(const std::string &filepath) {
 //     std::ifstream file(filepath);
 //     if (!file) {
@@ -143,4 +156,4 @@ inline bool write_file(const std::string &filepath, const std::vector<char> &dat
 //     return std::filesystem::status(filepath).permissions();
 // }
 
-#endif //HELPER_ZLIB_HPP
+#endif //FILEUTILS_HPP

@@ -27,7 +27,7 @@ namespace Pk {
             const Platforms::Arch &arch,
             const Platforms::Platform &platform,
 
-            const std::vector<File> &files
+            std::vector<File> &files
         );
 
         ~Package();
@@ -47,7 +47,7 @@ namespace Pk {
 
         const Platforms::Arch &get_arch() const { return arch; }
         const Platforms::Platform &get_platform() const { return platform; }
-        const std::vector<File> &get_files() const { return files; }
+        std::vector<File> &get_files() { return files; }
 
         std::string toSQL() const;
 

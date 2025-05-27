@@ -39,27 +39,27 @@ namespace Pk {
 
         static bool build_package(
             const std::string &image_path,
-            const std::string &pkg_dir, const std::unique_ptr<Package> &package,
-            const std::unique_ptr<Repository> &repository
+            const std::string &pkg_dir,
+            Package &package,
+            const Repository &repository
         );
 
     private:
-        static std::vector<char> build_package_db(const std::unique_ptr<Package> &package,
-                                                  const std::unique_ptr<Repository> &repository
+        static std::vector<char> build_package_db(Package &package,
+                                                  const Repository &repository
         );
 
         static void init_metadata_db(sqlite3 *db);
 
-        static void add_repository_db(sqlite3 *db, const std::unique_ptr<Repository> &repository);
+        static void add_repository_db(sqlite3 *db, const Repository &repository);
 
-        static void add_files_of_package_db(sqlite3 *db, const std::unique_ptr<Package> &package);
+        static void add_files_of_package_db(sqlite3 *db, Package &package);
 
-        static std::vector<char> build_package_body
+        static std::vector<std::vector<char> > build_package_body
         (
             PakFile &header,
-            std::vector<std::unique_ptr<File> > &pak_files,
             const std::string &pkg_dir,
-            const std::vector<std::string> &file_list, const std::unique_ptr<Package> &package
+            const std::vector<std::string> &file_list, uint32_t alignment, Package &package
         );
 
         static void calculate_header_sizes

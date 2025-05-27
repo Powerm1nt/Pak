@@ -31,7 +31,7 @@ namespace Pk {
         uint64_t last_updated,
         uint64_t created_at,
 
-        const std::vector<Package *> &packages
+        const std::vector<Package> &packages
     )
         : name(std::move(name)),
           description(std::move(description)),

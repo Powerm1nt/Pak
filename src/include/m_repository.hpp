@@ -34,7 +34,7 @@ namespace Pk {
             uint64_t last_updated,
             uint64_t created_at,
 
-            const std::vector<Package *> &packages
+            const std::vector<Package> &packages
         );
 
 
@@ -47,7 +47,7 @@ namespace Pk {
         uint64_t get_last_updated() const { return last_updated; }
         uint64_t get_created_at() const { return created_at; }
 
-        const std::vector<Package *> &get_packages() const { return packages; }
+        const std::vector<Package> &get_packages() const { return packages; }
 
         std::string toSQL() const;
 
@@ -60,7 +60,7 @@ namespace Pk {
         uint64_t last_updated;
         uint64_t created_at;
 
-        std::vector<Package *> packages;
+        std::vector<Package> packages;
     };
 } // namespace Pk
 

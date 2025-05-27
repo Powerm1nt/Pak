@@ -71,8 +71,8 @@ namespace Pk {
 
 	std::vector<char> Pak::build_package_db
 	(
-		const std::unique_ptr<Package> &package,
-		const std::unique_ptr<Repository> &repository
+		Package &package,
+		const Repository &repository
 	) {
 		sqlite3 *db = nullptr;
 
@@ -85,7 +85,12 @@ namespace Pk {
 		try {
 			init_metadata_db(db);
 			add_repository_db(db, repository);
-			add_files_of_package_db(db, package);
+
+			if (package.get_files().size() <= 0) {
+				std::cerr << "Warning: Package has no files" << std::endl;
+			} else {
+				add_files_of_package_db(db, package);
+			}
 		} catch (std::exception &error) {
 			std::cerr << "Critical: Failed to do transactions: " << error.what() << std::endl;
 			sqlite3_close(db);
@@ -115,22 +120,22 @@ namespace Pk {
 	void Pak::add_repository_db
 	(
 		sqlite3 *db,
-		const std::unique_ptr<Repository> &repository
+		const Repository &repository
 	) {
 		SQLiteTransaction transaction(db);
-		transaction.execute(repository->toSQL());
+		transaction.execute(repository.toSQL());
 	}
 
 	void Pak::add_files_of_package_db(
 		sqlite3 *db,
-		const std::unique_ptr<Package> &package
+		Package &package
 	) {
 		SQLiteTransaction transaction(db);
 
-		transaction.execute(package->toSQL());
+		transaction.execute(package.toSQL());
 
 		std::string files_sql;
-		for (const File &file: package->get_files()) {
+		for (const auto &file: package.get_files()) {
 			files_sql += file.toSQL() + "; ";
 		}
 
@@ -139,66 +144,57 @@ namespace Pk {
 		}
 	}
 
-	std::vector<char> Pak::build_package_body
+	std::vector<std::vector<char> > Pak::build_package_body
 	(
 		PakFile &header,
-		std::vector<std::unique_ptr<File> > &pak_files,
 		const std::string &pkg_dir,
 		const std::vector<std::string> &file_list,
-		const std::unique_ptr<Package> &package
+		const uint32_t alignment,
+		Package &package
 	) {
-		std::vector<char> body = {};
+		std::vector<std::vector<char> > objects = {};
 		uint64_t pNum = 0;
 
 		for (const std::string &fpath: file_list) {
 			try {
-				constexpr u_int32_t alignment = 4;
-				std::string fname = fpath.substr(pkg_dir.size() + 1);
+				const std::string fname = fpath.substr(pkg_dir.size() + 1);
 
 				std::vector<char> file = read_file(fpath);
 				std::vector<char> zFile = compress_data(file);
 				const uLong crc32 = compute_crc32(zFile);
 
-				body.insert(body.end(), zFile.begin(), zFile.end());
+				const uint64_t size = file.size();
+				const uint64_t compressed_size = zFile.size();
 
-				const uint32_t padding = (alignment - zFile.size() % alignment) % alignment;
+				const uint32_t padding = (alignment - compressed_size % alignment) % alignment;
 
-				uint64_t size = file.size();
-				uint64_t compressed_size = zFile.size();
-				uint64_t offset_start = body.size();
-				uint64_t offset_end = offset_start + compressed_size + padding;
+				const uint64_t offset_start = objects.size();
+				const uint64_t offset_end = offset_start + compressed_size + padding;
 
 				// File chunks are not implemented for now.
-				uint64_t chunk_size = compressed_size + padding;
-				uint32_t chunk_count = 1;
+				const uint64_t chunk_size = compressed_size + padding;
+				constexpr uint32_t chunk_count = 1;
 
-				uint32_t attributes = static_cast<uint32_t>(std::filesystem::status(fpath).permissions());
+				const uint32_t attributes = static_cast<uint32_t>(std::filesystem::status(fpath).permissions());
 
-				uint64_t last_updated = std::filesystem::last_write_time(fpath).time_since_epoch().count();
-				uint64_t created_at = std::filesystem::last_write_time(fpath).time_since_epoch().count();
+				const uint64_t last_updated = std::filesystem::last_write_time(fpath).time_since_epoch().count();
+				const uint64_t created_at = std::filesystem::last_write_time(fpath).time_since_epoch().count();
 
 				// FIXME: We need to use some another link solution link a littleUUID
 				// uint64_t pNum = 0;
 				// uint64_t repository = 0;
 
-				auto new_file = std::make_unique<File>(
-					fname,
-					fpath,
-					"",
-					std::to_string(crc32),
-					size,
-					compressed_size,
-					offset_start,
-					offset_end,
-					chunk_size,
-					chunk_count,
-					attributes,
-					last_updated,
-					created_at,
-					pNum
-				);
+				const std::vector new_file
+				{
+					File(fname, fpath, "",
+					     std::to_string(crc32), size, compressed_size,
+					     offset_start, offset_end, chunk_size, chunk_count,
+					     attributes, last_updated, created_at, pNum)
+				};
 
-				pak_files.push_back(std::move(new_file));
+				auto &pkgFiles = package.get_files();
+				pkgFiles.insert(pkgFiles.end(), new_file.begin(), new_file.end());
+				objects.push_back(zFile);
 
 				// We recalculate the computed size into the header
 				calculate_header_sizes(header, size, compressed_size, header.metadata_size);
@@ -210,7 +206,7 @@ namespace Pk {
 			}
 		}
 
-		return body;
+		return objects;
 	}
 
 	void Pak::calculate_header_sizes
@@ -231,8 +227,8 @@ namespace Pk {
 	(
 		const std::string &image_path,
 		const std::string &pkg_dir,
-		const std::unique_ptr<Package> &package,
-		const std::unique_ptr<Repository> &repository
+		Package &package,
+		const Repository &repository
 	) {
 		PakFile _headerObj = {
 			.magic = 0x50414B, // "PAK"
@@ -247,19 +243,22 @@ namespace Pk {
 		PakFile &header = _headerObj;
 
 		std::ofstream pak_file(image_path, std::ios::binary);
-		// const u_int32_t header_size = sizeof(PakFile);
-		// const u_int32_t alignment = 4;
-
+		constexpr u_int32_t alignment = 4;
 
 		if (!pak_file.is_open()) {
 			throw std::runtime_error("Cannot open file: " + image_path);
 		}
 
 		const std::vector<std::string> file_list = Utils::listFilesRecursively(pkg_dir);
-		std::vector<std::unique_ptr<File> > pak_files = {};
-
+		const std::vector<std::vector<char> > objects = build_package_body
+		(
+			header,
+			pkg_dir,
+			file_list,
+			alignment,
+			package
+		);
 		const std::vector<char> metadata = build_package_db(package, repository);
-		const std::vector<char> body = build_package_body(header, pak_files, pkg_dir, file_list, package);
 
 		calculate_header_sizes(header, header.total_size, header.body_compressed_size, metadata.size());
 
@@ -271,9 +270,10 @@ namespace Pk {
 		if (!pak_file)
 			throw std::runtime_error("Cannot write to file: " + image_path);
 
-		pak_file.write(body.data(), body.size());
-		if (!pak_file)
-			throw std::runtime_error("Cannot write to file: " + image_path);
+		// Align body section
+		for (const auto &compressed: objects) {
+			writeAlignedData(pak_file, compressed.data(), compressed.size(), alignment);
+		}
 
 		pak_file.flush();
 		pak_file.close();

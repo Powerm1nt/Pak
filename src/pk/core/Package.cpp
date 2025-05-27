@@ -38,7 +38,7 @@ namespace Pk {
         const Platforms::Arch &arch,
         const Platforms::Platform &platform,
 
-        const std::vector<File> &files
+        std::vector<File> &files
     )
         : name(std::move(name)),
           version(std::move(version)),
@@ -51,7 +51,7 @@ namespace Pk {
           repository(std::move(repository)),
           last_updated(std::move(last_updated)),
           created_at(std::move(created_at)),
-          files(files) {
+          files(std::move(files)) {
     }
 
     Package::~Package() = default;
