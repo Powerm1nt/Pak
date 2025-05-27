@@ -37,9 +37,11 @@ namespace Pk {
             uint64_t compressed_size,
             uint64_t offset_start,
             uint64_t offset_end,
-            uint64_t chunk_size,
 
-            uint32_t chunk_count,
+            uint64_t chunk_size,
+            uint64_t chunk_count, //TODO move into Object
+            uint64_t object_id,
+
             uint32_t attributes,
 
             uint64_t last_updated,
