@@ -50,6 +50,8 @@ add_library(Pak SHARED
         src/pk/core/SQLiteTransaction.cpp
         src/include/database.hpp
         src/include/fileutils.hpp
+        src/include/m_object.hpp
+        src/include/m_chunk.hpp
 )
 
 set_target_properties(Pak PROPERTIES

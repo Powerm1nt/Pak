@@ -1,5 +1,5 @@
 /*
- * Pakagify, Pak, PkCli
+ * Pakagify, PkFramework, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 #include <sqlite3.h>
 
+#include <cstdint>
 #include <string>
 
 #include "m_file.hpp"
@@ -29,32 +30,30 @@ namespace Pk {
         std::string symlink_path,
         std::string crc32,
 
-        uint64_t size,
-        uint64_t compressed_size,
-        uint64_t offset_start,
-        uint64_t offset_end,
-        uint64_t chunk_size,
+        const uint64_t size,
+        const uint64_t compressed_size,
 
-        uint32_t chunk_count,
-        uint32_t attributes,
+        const uint64_t chunk_size,
+        const uint64_t chunk_count,
+        const uint64_t object_id,
 
-        uint64_t last_updated,
-        uint64_t created_at,
-        uint64_t package
+        const uint32_t attributes,
+
+        const uint64_t last_updated,
+        const uint64_t created_at,
+        const uint64_t package
     ): filename(std::move(filename)),
        path(std::move(path)),
        symlink_path(std::move(symlink_path)),
        crc32(std::move(crc32)),
-       size(std::move(size)),
-       compressed_size(std::move(compressed_size)),
-       offset_start(std::move(offset_start)),
-       offset_end(std::move(offset_end)),
-       chunk_size(std::move(chunk_size)),
-       chunk_count(std::move(chunk_count)),
-       attributes(std::move(attributes)),
-       last_updated(std::move(last_updated)),
-       created_at(std::move(created_at)),
-       package(std::move(package)) {
+       size(size),
+       compressed_size(compressed_size),
+       chunk_size(chunk_size),
+       chunk_count(chunk_count),
+       attributes(attributes),
+       last_updated(last_updated),
+       created_at(created_at),
+       package_id(package) {
     }
 
     File::~File() = default;
@@ -76,7 +75,7 @@ namespace Pk {
             attributes,
             last_updated,
             created_at,
-            package
+            package_id
         );
 
         std::string sql(sql_raw);
