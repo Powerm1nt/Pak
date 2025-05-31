@@ -21,7 +21,7 @@
 
 #include "m_repository.hpp"
 
-namespace Pk {
+namespace Pak {
     Repository::Repository(
         std::string name,
         std::string description,
@@ -61,4 +61,4 @@ namespace Pk {
     }
 
     Repository::~Repository() = default;
-} // namespace Pk
+} // namespace Pak

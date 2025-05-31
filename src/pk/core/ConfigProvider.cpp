@@ -26,7 +26,7 @@
 #include "m_config.hpp"
 #include "fileutils.hpp"
 
-namespace Pk {
+namespace Pak {
 	std::string ConfigProvider::get_env_value(const std::string &key) {
 #ifdef WIN32
 		char* value = nullptr;
@@ -123,4 +123,4 @@ namespace Pk {
 
 		return true;
 	}
-} // namespace Pk
+} // namespace Pak

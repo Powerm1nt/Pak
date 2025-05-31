@@ -1,5 +1,5 @@
 /*
- * Pakagify, Pak, PkCli
+ * Pakagify, PkFramework, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <sqlite3.h>
 
 #include <string>
+#include <functional>
 
 class SQLiteTransaction {
     sqlite3 *db;
@@ -30,9 +31,16 @@ class SQLiteTransaction {
 public:
     explicit SQLiteTransaction(sqlite3 *db);
 
+    using SQLiteCallback = std::function<void(int columns, char **values, char **names)>;
+
     ~SQLiteTransaction();
 
-    void execute(const std::string &sql);
+    void execute
+    (
+       const std::string &sql,
+       int (*callback)(void *pvData, int nc, char **azData, char **azNames),
+       void *cbArg
+    );
 };
 
 #endif //DATABASE_HPP

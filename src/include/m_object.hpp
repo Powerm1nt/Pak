@@ -22,23 +22,30 @@
 
 #ifndef M_OBJECT_HPP
 #define M_OBJECT_HPP
-#include <cstdint>
 
-namespace Pk {
+#include <cstdint>
+#include <string>
+
+namespace Pak {
     class Object {
     public:
         Object
         (
             uint64_t object_id,
-            uint64_t chunk_size,
-            uint64_t chunk_count,
+            uint64_t size,
+            uint64_t z_size,
             uint64_t last_updated,
-            uint64_t created_at,
-            uint64_t last_modified
+            uint64_t last_accessed,
+            uint64_t created_at
         );
 
-        ~Object() = default;
+        ~Object();
 
+        [[nodiscard]] std::string toSQL() const;
+
+        [[nodiscard]] uint64_t get_object_id() const { return object_id; }
+        [[nodiscard]] uint64_t get_size() const { return size; }
+        [[nodiscard]] uint64_t get_compressed_size() const { return compressed_size; }
         [[nodiscard]] uint64_t get_last_updated() const { return last_updated; }
         [[nodiscard]] uint64_t get_last_accessed() const { return last_accessed; }
         [[nodiscard]] uint64_t get_created_at() const { return created_at; }
@@ -47,9 +54,6 @@ namespace Pk {
         uint64_t object_id;
         uint64_t size;
         uint64_t compressed_size;
-
-        uint64_t chunk_size;
-        uint64_t chunk_count;
 
         uint64_t last_updated;
         uint64_t last_accessed;

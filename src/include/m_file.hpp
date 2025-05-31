@@ -26,21 +26,17 @@
 
 #include "m_object.hpp"
 
-namespace Pk {
-    class File : Object {
+namespace Pak {
+    class File : public Object {
     public:
         File(
             std::string filename,
             std::string path,
             std::string symlink_path,
 
-            uint64_t size,
-            uint64_t compressed_size,
-
             uint32_t attributes,
 
-
-            uint64_t package
+            uint64_t package_id
         );
 
         ~File();
@@ -51,10 +47,8 @@ namespace Pk {
         [[nodiscard]] const std::string &get_path() const { return path; }
         [[nodiscard]] const std::string &get_symlink_path() const { return symlink_path; }
 
-        [[nodiscard]] uint64_t get_size() const { return size; }
-        [[nodiscard]] uint64_t get_compressed_size() const { return compressed_size; }
-
         [[nodiscard]] uint32_t get_attributes() const { return attributes; }
+        [[nodiscard]] uint64_t get_package_id() const { return package_id; }
 
     private:
         std::string filename;
@@ -62,6 +56,8 @@ namespace Pk {
         std::string symlink_path;
 
         uint32_t attributes;
+
+        uint64_t package_id;
     };
 }
 

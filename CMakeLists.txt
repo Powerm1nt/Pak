@@ -26,6 +26,7 @@ endif ()
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_TOOLCHAIN_FILE "~/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/vcpkg_installed/${ARCH}-${VCPKG_OS}")
@@ -52,6 +53,8 @@ add_library(Pak SHARED
         src/include/fileutils.hpp
         src/include/m_object.hpp
         src/include/m_chunk.hpp
+        src/pk/core/Object.cpp
+        src/pk/core/Chunk.cpp
 )
 
 set_target_properties(Pak PROPERTIES

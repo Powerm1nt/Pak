@@ -23,7 +23,7 @@
 #include <vector>
 #include "m_package.hpp"
 
-namespace Pk {
+namespace Pak {
     class Repository {
     public:
         Repository(
@@ -62,6 +62,6 @@ namespace Pk {
 
         std::vector<Package> packages;
     };
-} // namespace Pk
+} // namespace Pak
 
 #endif // MODEL_REPOSITORY_HPP

@@ -1,5 +1,5 @@
 /*
- * Pakagify, Pak, PkCli
+ * Pakagify, PkFramework, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,60 +22,75 @@
 #include <string>
 
 inline const std::string pak_initial_sql =
-        "create table main.repositories"
+        "create table       main.repositories"
         "("
-        "id           integer not null"
-        "constraint repositories_pk"
-        "primary key autoincrement,"
-        "name         TEXT    not null,"
-        "description  TEXT,"
-        "author       TEXT    not null,"
-        "url          TEXT,"
-        "last_updated integer not null,"
-        "created_at   integer not null"
+        "id                 integer not null"
+        "constraint         repositories_pk"
+        "primary key        autoincrement,"
+        "name               TEXT    not null,"
+        "description        TEXT,"
+        "author             TEXT    not null,"
+        "url                TEXT,"
+        "last_updated       integer not null,"
+        "created_at         integer not null"
         ");"
 
-        "create table main.packages"
+        "create table       main.packages"
         "("
-        "id               integer not null"
-        "constraint packages_pk"
-        "primary key autoincrement,"
-        "name             TEXT    not null,"
-        "version          TEXT    not null,"
-        "description      TEXT,"
-        "author           TEXT    not null,"
-        "install_location TEXT    not null,"
-        "license          TEXT,"
-        "arch             TEXT    not null,"
-        "platform         TEXT    not null,"
-        "last_updated     integer not null,"
-        "created_at       integer not null,"
-        "repository       integer not null"
-        "constraint packages_repositories_id_fk"
-        "references main.repositories"
+        "id                 integer not null"
+        "constraint         packages_pk"
+        "primary key        autoincrement,"
+        "name               TEXT    not null,"
+        "version            TEXT    not null,"
+        "description        TEXT,"
+        "author             TEXT    not null,"
+        "install_location   TEXT    not null,"
+        "license            TEXT,"
+        "arch               TEXT    not null,"
+        "platform           TEXT    not null,"
+        "last_updated       integer not null,"
+        "created_at         integer not null,"
+        "repository         integer not null"
+        "constraint         packages_repositories_id_fk"
+        "references         main.repositories"
         ");"
 
-        "create table main.files"
+        "create table       main.files"
         "("
-        "id             integer not null"
-        "constraint files_pk"
-        "primary key autoincrement,"
+        "id                 integer not null"
+        "constraint         files_pk"
+        "primary key        autoincrement,"
         "filename           TEXT    not null,"
         "path               TEXT    not null,"
         "symlink_path       TEXT," // TODO: Add symlinks support
-        "crc32              TEXT    not null," // Decompressed file state
-        "size               integer not null,"
-        "compressed_size    integer not null,"
-        "offset_start       integer not null,"
-        "offset_end         integer not null,"
-        "chunk_size         integer not null,"
-        "chunk_count        integer not null,"
         "attributes         integer not null," // like chmod 775 (int value)
         "last_updated       integer not null,"
         "created_at         integer not null,"
         "package            integer not null"
-        "constraint files_packages_id_fk"
-        "references main.packages"
+        "constraint         files_packages_id_fk"
+        "references         main.packages"
+        ");"
+
+        "create table main.chunks"
+        "("
+        "chunk_id           integer not null"
+        "constraint         chunks_pk"
+        "primary key        autoincrement,"
+        "chunk_address      integer not null,"
+        "chunk_size         integer not null,"
+        "crc32              integer not null"
+        ");"
+
+        "create table main.objects"
+        "("
+        "object_id          integer not null"
+        "constraint         objects_pk"
+        "primary key        autoincrement,"
+        "size               integer not null,"
+        "z_size             integer not null,"
+        "last_updated       integer not null,"
+        "last_accessed      integer not null,"
+        "created_at         integer not null"
         ");"
 
         "create index main.packages_id_author_repository_index"
@@ -88,7 +103,7 @@ inline const std::string pak_initial_sql =
         "on main.files (id, filename, package);";
 
 
-namespace Pk {
+namespace Pak {
     struct PakFile {
         uint32_t magic;
         uint16_t version;

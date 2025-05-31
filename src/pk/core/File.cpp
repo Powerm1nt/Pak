@@ -23,37 +23,20 @@
 
 #include "m_file.hpp"
 
-namespace Pk {
+namespace Pak {
     File::File(
         std::string filename,
         std::string path,
         std::string symlink_path,
-        std::string crc32,
-
-        const uint64_t size,
-        const uint64_t compressed_size,
-
-        const uint64_t chunk_size,
-        const uint64_t chunk_count,
-        const uint64_t object_id,
 
         const uint32_t attributes,
 
-        const uint64_t last_updated,
-        const uint64_t created_at,
-        const uint64_t package
+        const uint64_t package_id
     ): filename(std::move(filename)),
        path(std::move(path)),
        symlink_path(std::move(symlink_path)),
-       crc32(std::move(crc32)),
-       size(size),
-       compressed_size(compressed_size),
-       chunk_size(chunk_size),
-       chunk_count(chunk_count),
        attributes(attributes),
-       last_updated(last_updated),
-       created_at(created_at),
-       package_id(package) {
+       package_id(package_id) {
     }
 
     File::~File() = default;

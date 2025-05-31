@@ -8,7 +8,7 @@
 #include "m_file.hpp"
 #include "m_os.hpp"
 
-namespace Pk {
+namespace Pak {
     class Package {
     public:
         Package(
@@ -74,6 +74,6 @@ namespace Pk {
             std::string post_inst;
         };
     };
-} // namespace Pk
+} // namespace Pak
 
 #endif // MODEL_PACKAGE_HPP

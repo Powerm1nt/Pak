@@ -63,7 +63,7 @@ Command getCommand(const std::string &cmd) {
 int main(int argc, char *argv[]) {
     // Testing Pak
 
-    auto pktest = new Pk::Pak();
+    auto pktest = new Pak::Pak();
 
     argh::parser cmdl;
 

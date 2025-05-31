@@ -1,5 +1,5 @@
 /*
- * Pakagify, Pak, PkCli
+ * Pakagify, PkFramework, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 #include <memory>
 #include <string>
 
-namespace Pk {
+namespace Pak {
 	class ConfigProvider {
 	public:
 		const std::string &get_token() const { return token; }
@@ -49,6 +49,6 @@ namespace Pk {
 		std::string config_file;
 		std::unique_ptr<std::string> config_dir;
 	};
-} // namespace Pk
+} // namespace Pak
 
 #endif  // CONFIG_PROVIDER_HPP

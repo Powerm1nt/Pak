@@ -1,5 +1,5 @@
 /*
- * Pakagify, Pak, PkCli
+ * Pakagify, PkFramework, PkCli
  * Copyright (C) 2025 NukaWorks
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ SQLiteTransaction::SQLiteTransaction(sqlite3 *db)
     }
 
     try {
-        execute("BEGIN TRANSACTION");
+      execute("BEGIN TRANSACTION", nullptr, nullptr);
     } catch (std::runtime_error &error) {
         std::cerr << "Unable to do the transaction: " << error.what() << std::endl;
         throw;
@@ -39,14 +39,20 @@ SQLiteTransaction::SQLiteTransaction(sqlite3 *db)
 
 SQLiteTransaction::~SQLiteTransaction() {
     if (errmsg != nullptr) sqlite3_free(errmsg);
-    execute("COMMIT");
+    execute("COMMIT", nullptr, nullptr);
 }
 
-void SQLiteTransaction::execute(const std::string &sql) {
-    if (const int req = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errmsg); req != SQLITE_OK) {
+void SQLiteTransaction::execute
+(const std::string &sql,
+ int (*callback)(void *pvData, int nc, char **azData, char **azNames) = nullptr,
+ void *cbArg = nullptr
+) {
+    if (const int req = sqlite3_exec(db, sql.c_str(), callback, cbArg, &errmsg); req != SQLITE_OK) {
         const std::string error_msg = errmsg;
         sqlite3_free(errmsg);
         errmsg = nullptr;
+	
         throw std::runtime_error("Database error: " + error_msg);
     }
 }
+

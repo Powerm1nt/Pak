@@ -23,19 +23,45 @@
 #ifndef M_CHUNK_HPP
 #define M_CHUNK_HPP
 #include <cstdint>
+#include <string>
+#include <vector>
 
-namespace Pk {
+namespace Pak {
     class Chunk {
     public:
-        Chunk();
+        Chunk
+        (
+            uint64_t chunk_id,
+            uint64_t chunk_address,
+            uint64_t chunk_size,
 
-        ~Chunk() = default;
+            uint32_t crc32
+        );
 
+        ~Chunk();
+
+        [[nodiscard]] std::string toSQL() const;
+
+	[[nodiscard]] std::vector<char> read(const uint64_t chunk_address, const uint64_t chunk_size);
+      
+        [[nodiscard]] static std::vector<char> align_data_to_boundary(const char *inputData, size_t padding);
+
+        [[nodiscard]] uint64_t get_chunk_size() const { return chunk_size; }
+        [[nodiscard]] uint64_t get_chunk_address() const { return chunk_address; }
+        [[nodiscard]] uint64_t get_chunk_id() const { return chunk_id; }
+	
+        [[nodiscard]] uint32_t get_crc32() const { return crc32; }
+
+
+	void set_chunk_id(uint64_t chunk_id) { this->chunk_id = chunk_id;  }
+	void set_chunk_address(uint64_t chunk_address) { this->chunk_address = chunk_address;  }
+	void set_chunk_size(uint64_t chunk_size) { this->chunk_size = chunk_size; }
+	void set_crc32(uint32_t crc32) { this->crc32 = crc32; }
     private:
-        uint64_t chunk_size;
+        uint64_t chunk_id;
         uint64_t chunk_address;
-        uint64_t object_id;
-
+        uint64_t chunk_size;
+	
         uint32_t crc32;
     };
 }

@@ -21,7 +21,7 @@
 
 #include "m_package.hpp"
 
-namespace Pk {
+namespace Pak {
     Package::Package(
         std::string name,
         std::string version,
@@ -78,4 +78,4 @@ namespace Pk {
 
         return sql;
     }
-} // namespace Pk
+} // namespace Pak
